@@ -1,0 +1,6 @@
+secrets.toml
+venv/
+CRUD_DATA.csv
+CRUD_DATA.sql
+database/
+data.sql
