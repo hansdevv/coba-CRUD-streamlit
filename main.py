@@ -107,13 +107,13 @@ def init_connection():
 	# host = os.getenv("host")
 	# database = os.getenv("database")
 	# password = os.getenv("password")
-	user = st.secrets["user"]
-	host = st.secrets["host"]
-	database = st.secrets["database"]
-	password = st.secrets["password"]
+	# user = st.secrets["user"]
+	# host = st.secrets["host"]
+	# database = st.secrets["database"]
+	# password = st.secrets["password"]
 	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
-	return mysql.connector.connect(user=user, host=host,database=database,password=password)
-	# return mysql.connector.connect(**st.secrets["mysql"])
+	# return mysql.connector.connect(user=user, host=host,database=database,password=password)
+	return mysql.connector.connect(**st.secrets["mysql"])
 
 conn = init_connection()
 
