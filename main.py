@@ -149,8 +149,8 @@ client = init_connection()
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 @st.cache_data(ttl=600)
 def get_data():
-    db = client.coba
-    items = db.cobacoba.find()
+    db = client.tapam_mohamadburhanudin
+    items = db.data_pemilih.find()
     items = list(items)  # make hashable for st.cache_data
     return items
 
@@ -158,4 +158,4 @@ items = get_data()
 
 # Print results.
 for item in items:
-    st.write(f"{item['name']} has a :{item['pet']}:")
+    st.write(f"{item['nim']} has a :{item['nama']}:")
