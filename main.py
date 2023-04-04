@@ -92,41 +92,70 @@
 # update
 
 
-import streamlit as st
-import mysql.connector
-from dotenv import load_dotenv
-import os
+# import streamlit as st
+# import mysql.connector
+# from dotenv import load_dotenv
+# import os
 
-load_dotenv()
+# load_dotenv()
+
+# # Initialize connection.
+# # Uses st.cache_resource to only run once.
+# # @st.cache_resource
+# def init_connection():
+# 	# user = os.getenv("user")
+# 	# host = os.getenv("host")
+# 	# database = os.getenv("database")
+# 	# password = os.getenv("password")
+# 	# user = st.secrets["user"]
+# 	# host = st.secrets["host"]
+# 	# database = st.secrets["database"]
+# 	# password = st.secrets["password"]
+# 	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
+# 	# return mysql.connector.connect(user=user, host=host,database=database,password=password)
+# 	return mysql.connector.connect(**st.secrets.mysql)
+
+# conn = init_connection()
+
+# # Perform query.
+# # Uses st.cache_data to only rerun when the query changes or after 10 min.
+# @st.cache_data(ttl=600)
+# def run_query(query):
+#     with conn.cursor() as cur:
+#         cur.execute(query)
+#         return cur.fetchall()
+
+# rows = run_query("SELECT * from orang;")
+
+# # Print results.
+# for row in rows:
+#     st.write(f"{row[0]} has a :{row[1]}:")
+
+# streamlit_app.py
+
+import streamlit as st
+import pymongo
 
 # Initialize connection.
 # Uses st.cache_resource to only run once.
-# @st.cache_resource
+@st.cache_resource
 def init_connection():
-	# user = os.getenv("user")
-	# host = os.getenv("host")
-	# database = os.getenv("database")
-	# password = os.getenv("password")
-	# user = st.secrets["user"]
-	# host = st.secrets["host"]
-	# database = st.secrets["database"]
-	# password = st.secrets["password"]
-	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
-	# return mysql.connector.connect(user=user, host=host,database=database,password=password)
-	return mysql.connector.connect(**st.secrets.mysql)
+    # return pymongo.MongoClient(**st.secrets["mongo"])
+    return pymongo.MongoClient(st.secrets["uri"])
 
-conn = init_connection()
+client = init_connection()
 
-# Perform query.
+# Pull data from the collection.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
 @st.cache_data(ttl=600)
-def run_query(query):
-    with conn.cursor() as cur:
-        cur.execute(query)
-        return cur.fetchall()
+def get_data():
+    db = client.mydb
+    items = db.mycollection.find()
+    items = list(items)  # make hashable for st.cache_data
+    return items
 
-rows = run_query("SELECT * from orang;")
+items = get_data()
 
 # Print results.
-for row in rows:
-    st.write(f"{row[0]} has a :{row[1]}:")
+for item in items:
+    st.write(f"{item['name']} has a :{item['pet']}:")
