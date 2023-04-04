@@ -53,34 +53,75 @@
 #     main()
 
 
+# import streamlit as st
+# from deta import Deta
+# from dotenv import load_dotenv
+# import os
+
+# load_dotenv()
+
+# st.title("CRUD Streamlit with SQLite3")
+
+# # Data to be written to Deta Base
+# with st.form("form"):
+#     name = st.text_input("Your name")
+#     age = st.number_input("Your age")
+#     submitted = st.form_submit_button("Store in database")
+
+# # Connect to Deta Base with your Data Key
+# # deta = Deta(st.secrets["KEY"])
+# deta = Deta(os.getenv("KEY"))
+
+# # Create a new database "example-db"
+# # If you need a new database, just use another name.
+# db = deta.Base("Coba_base")
+
+# # If the user clicked the submit button,
+# # write the data from the form to the database.
+# # You can store any data you want here. Just modify that dictionary below (the entries between the {}).
+# if submitted:
+#     db.put({"name": name, "age": age})
+
+# "---"
+# "Here's everything stored in the database:"
+# # This reads all items from the database and displays them to your app.
+# # db_content is a list of dictionaries. You can do everything you want with it.
+# db_content = db.fetch().items
+# st.write(db_content)
+# update = db.update({name: 'cobaUbah'},key='91a39v3e6pq5')
+# update
+
+
 import streamlit as st
-from deta import Deta
+import mysql.connector
+from dotenv import load_dotenv
+import os
 
-# Data to be written to Deta Base
-with st.form("form"):
-    name = st.text_input("Your name")
-    age = st.number_input("Your age")
-    submitted = st.form_submit_button("Store in database")
+load_dotenv()
 
+# Initialize connection.
+# Uses st.cache_resource to only run once.
+@st.cache_resource
+def init_connection():
+	# user = os.getenv("user")
+	# host = os.getenv("host")
+	# database = os.getenv("database")
+	# password = os.getenv("password")
+	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
+	return mysql.connector.connect(**st.secrets["mysql"])
 
-# Connect to Deta Base with your Data Key
-deta = Deta(st.secrets["KEY"])
+conn = init_connection()
 
-# Create a new database "example-db"
-# If you need a new database, just use another name.
-db = deta.Base("Coba_base")
+# Perform query.
+# Uses st.cache_data to only rerun when the query changes or after 10 min.
+@st.cache_data(ttl=600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        return cur.fetchall()
 
-# If the user clicked the submit button,
-# write the data from the form to the database.
-# You can store any data you want here. Just modify that dictionary below (the entries between the {}).
-if submitted:
-    db.put({"name": name, "age": age})
+rows = run_query("SELECT * from orang;")
 
-"---"
-"Here's everything stored in the database:"
-# This reads all items from the database and displays them to your app.
-# db_content is a list of dictionaries. You can do everything you want with it.
-db_content = db.fetch().items
-st.write(db_content)
-
-
+# Print results.
+for row in rows:
+    st.write(f"{row[0]} has a :{row[1]}:")

@@ -4,3 +4,4 @@ CRUD_DATA.csv
 CRUD_DATA.sql
 database/
 data.sql
+.env
