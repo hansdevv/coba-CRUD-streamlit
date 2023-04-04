@@ -113,7 +113,7 @@ def init_connection():
 	# password = st.secrets["password"]
 	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
 	# return mysql.connector.connect(user=user, host=host,database=database,password=password)
-	return mysql.connector.connect(**st.secrets["mysql"])
+	return mysql.connector.connect(**st.secrets.mysql)
 
 conn = init_connection()
 
