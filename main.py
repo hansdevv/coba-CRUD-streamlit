@@ -110,10 +110,10 @@ def init_connection():
 	user = st.secrets("user")
 	host = st.secrets("host")
 	database = st.secrets("database")
-	user = st.secrets("user")
+	# user = st.secrets("user")
 	password = st.secrets("password")
 	# return mysql.connector.connect(user=user,host=host,database=database,password=password)
-	return mysql.connector.connect(user=user,host=host,database=database,password=password)
+	return mysql.connector.connect(host=host,database=database,password=password)
 	# return mysql.connector.connect(**st.secrets["mysql"])
 
 conn = init_connection()
