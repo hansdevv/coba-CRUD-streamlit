@@ -159,3 +159,4 @@ items = get_data()
 # Print results.
 for item in items:
     st.write(f"{item['nim']} has a :{item['nama']}:")
+    st.write(item)
