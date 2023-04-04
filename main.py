@@ -55,7 +55,13 @@
 
 import streamlit as st
 from deta import Deta
-import secrets
+import toml
+
+# Baca file secrets.toml
+secrets = toml.load("secrets.toml")
+
+# Mengakses informasi rahasia
+api_token = secrets["KEY"]
 
 # Data to be written to Deta Base
 with st.form("form"):
@@ -65,7 +71,7 @@ with st.form("form"):
 
 
 # Connect to Deta Base with your Data Key
-deta = Deta(st.secrets["KEY"])
+deta = Deta(st.secrets[api_token])
 
 # Create a new database "example-db"
 # If you need a new database, just use another name.
